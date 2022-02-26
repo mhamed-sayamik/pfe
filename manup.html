@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>creer votre background</title>
+</head>
+<body>
+        <div class="shapeGen">
+        <select id="shape">
+            <h3>shape :</h3>
+            <option value="tri">triangle</option>
+            <option value="cer">cercle</option>
+            <option value="rect">rectangle</option>
+        </select>
+        <select id="fill">
+            <h3>coleur du fill:</h3>
+            <option value="none">sans</option>            
+            <option value="blue">blue</option>
+            <option value="yellow">jaune</option>
+            <option value="green">vert</option>
+        </select>
+        <select id="stroke">
+            <h3>coleur du stroke:</h3>
+            <option value="none">sans</option>            
+            <option value="blue">blue</option>
+            <option value="yellow">jaune</option>
+            <option value="green">vert</option>
+        </select>
+        <input type="button" value="ajouter" id="add-button">
+        </div>
+        <div class="main">
+        <svg id="bgsvg" width="500" height="500" style="overflow:visible">
+            <rect width="500" height="500" style="fill:#DAF7A6;" />
+        </svg>
+        <div class="move-pl" style="display: none;">
+            <input type="button" value="up" id="up">
+            <input type="button" value="down" id="down">
+            <input type="button" value="left" id="left">
+            <input type="button" value="right" id=right>
+        </div>
+        </div>
+
+
+    
+
+<script>
+    const svgbg=document.getElementById("bgsvg");
+    //triangle 
+       
+    //cercle
+        
+    //rectangle
+    //add button
+    document.getElementById("add-button").onclick = function() {
+        var shape = document.getElementById("shape").value;
+        var fill = document.getElementById("fill").value;
+        var stroke = document.getElementById("stroke").value;
+        //check if both values are none
+        if(fill=="none" && stroke=="none"){
+            alert("Il est interdit de mettre le fill et le stroke nuls");           //alert
+            return;
+        }
+    if(shape == "tri"){//triangl
+            var x1 = 20;
+            var x2 = 75;
+            var x3 = 125;
+            var y1 = 100;
+            var y2 = 20;
+            var y3 = 100;
+        var obj=document.createElementNS("http://www.w3.org/2000/svg","polygon")
+        obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+    if(shape == "cer"){
+        var cx =50;
+        var cy = 50;
+        var r=20;
+        var obj=document.createElementNS("http://www.w3.org/2000/svg","circle");
+        obj.setAttribute("cx",`${cx}`);
+        obj.setAttribute("cy",`${cy}`);
+        obj.setAttribute("r",`${r}`);
+    }
+    if(shape == "rect"){
+        var x =20;
+        var y = 20;
+        var height = 100;
+        var width = 100;
+        var obj=document.createElementNS("http://www.w3.org/2000/svg","rect");
+        obj.setAttribute("width",`${height}`);
+        obj.setAttribute("height",`${width}`);
+        obj.setAttribute("x",`${x}`);
+        obj.setAttribute("y",`${y}`);
+    }
+        //set the style
+        obj.setAttribute("fill",fill);
+        obj.setAttribute("stroke",stroke);
+        obj.setAttribute("stroke-width","3");
+        //add the object
+        svgbg.appendChild(obj);
+        //show control panel
+        document.getElementsByClassName("move-pl")[0].style.display="block";
+       
+        //mouvement
+          var move = 40;
+         //deplacement value
+        document.getElementById("up").onclick = function(){
+            
+            if(shape == "rect"){
+            if(y-move>0){
+                y=y-move;
+            }
+            else{
+                y=0;
+            }
+            obj.setAttribute("y",`${y}`);
+        }
+        else if(shape == "cer"){
+            if((cy-r)-move>0){
+                cy=cy-move;
+            }
+            else{
+                cy=r;
+            }
+            obj.setAttribute("cy",`${cy}`);
+        }
+        if(shape == "tri"){
+            //suppose y2 is the heigher
+            if(y2-move>0){
+                y1=y1-move;
+                y2=y2-move;
+                y3=y3-move;
+            }
+            else{
+                y3=y3-y2;
+                y1=y1-y2;
+                y2=0;
+                
+            }
+            obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+
+    }//end of up
+    document.getElementById("down").onclick = function(){
+            
+            if(shape == "rect"){
+            if(y+height+move<500){
+                y=y+move;
+            }
+            else{
+                y=500-height;
+            }
+            obj.setAttribute("y",`${y}`);
+        }
+        else if(shape == "cer"){
+            if((cy+r)+move<500){
+                cy=cy+move;
+            }
+            else{
+                cy=500-r;
+            }
+            obj.setAttribute("cy",`${cy}`);
+        }
+        if(shape == "tri"){
+            //suppose y1 y3 are the lowers
+            if(y1+move<500){
+                y1=y1+move;
+                y2=y2+move;
+                y3=y3+move;
+            }
+            else{
+                y2=y2+500-y3;
+                y3=500;
+                y1=500;
+                
+            }
+            obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+
+    }//end of down
+    document.getElementById("right").onclick = function(){
+            
+            if(shape == "rect"){
+            if(x+height+move<500){
+                x=x+move;
+            }
+            else{
+                x=500-width;
+            }
+            obj.setAttribute("x",`${x}`);
+        }
+        else if(shape == "cer"){
+            if((cx+r)+move<500){
+                cx=cx+move;
+            }
+            else{
+                cx=500-r;
+            }
+            obj.setAttribute("cx",`${cx}`);
+        }
+        if(shape == "tri"){
+            //suppose x3 is on right
+            if(x3+move<500){
+                x1=x1+move;
+                x2=x2+move;
+                x3=x3+move;
+            }
+            else{
+                x1=x1+500-x3;
+                x2=x2+500-x3;
+                x3=500;
+            }
+            obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+
+    }//end of right
+    document.getElementById("left").onclick = function(){
+            
+            if(shape == "rect"){
+            if(x-move>0){
+                x=x-move;
+            }
+            else{
+                x=0;
+            }
+            obj.setAttribute("x",`${x}`);
+        }
+        else if(shape == "cer"){
+            if((cx-r)-move>0){
+                cx=cx-move;
+            }
+            else{
+                cx=r;
+            }
+            obj.setAttribute("cx",`${cx}`);
+        }
+        if(shape == "tri"){
+            //suppose x1 is on the left
+            if(x1-move>0){
+                x1=x1-move;
+                x2=x2-move;
+                x3=x3-move;
+            }
+            else{
+                x3=x3-x1;
+                x2=x2-x1;
+                x1=0;
+                
+            }
+            obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+
+    }//end of left
+}
+    
+
+</script>
+</body>
+</html>
