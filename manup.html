@@ -7,19 +7,20 @@
     <title>creer votre background</title>
 </head>
 <body>
-        <div class="shapeGen">
+<div class="shapeGen">
         <select id="shape">
             <h3>shape :</h3>
             <option value="tri">triangle</option>
             <option value="cer">cercle</option>
             <option value="rect">rectangle</option>
+            <option value="line">ligne</option>
         </select>
         <select id="fill">
             <h3>coleur du fill:</h3>
             <option value="none">sans</option>            
             <option value="blue">blue</option>
             <option value="yellow">jaune</option>
-            <option value="green">vert</option>
+            <option value="gr2een">vert</option>
         </select>
         <select id="stroke">
             <h3>coleur du stroke:</h3>
@@ -29,19 +30,22 @@
             <option value="green">vert</option>
         </select>
         <input type="button" value="ajouter" id="add-button">
-        </div>
+</div>
     <div class="main">
         <svg id="bgsvg" width="500" height="500" style="overflow:visible">
-            <rect width="500" height="500" style="fill:#DAF7A6;" />
+            <rect id="rect-bg" width="500" height="500" style="fill:#DAF7A6;" />
         </svg>
+        <div id="shape-gest" style="position: absolute; top: 0;left: 70%; display: flex; flex-direction: column;   height: 100%; ">
+            <button id="gest-del">supprimer</button>
+            <button id="gest-next">suivant</button>
+            <button id="gest-prev">précedent</button>
+        </div>
         <div class="move-pl" style="display: none;">
             <input type="button" value="up" id="up">
             <input type="button" value="down" id="down">
             <input type="button" value="left" id="left">
             <input type="button" value="right" id=right>
-            <button id="mfy-btn"></button>
         </div>
-        <div class="modify-pl" >
             <div id="mfy-tri" style="display: none;">
             x1(min): <input type="text" id="x1">
             y1(max): <input type="text" id="y1">
@@ -61,9 +65,13 @@
                 cy: <input type="text" id="cy">
                 r: <input type="text" id="r"> 
             </div>
-            
-            
-        </div>
+            <div id="mfy-line" style="display: none;">
+                x1(min): <input type="text" id="lx1">
+                y1(min): <input type="text" id="ly1">
+                x2: <input type="text" id="lx2"> 
+                y2: <input type="text" id="ly2">
+            </div>
+    
     </div>
 
 
@@ -72,7 +80,9 @@
 <script>
     const svgbg=document.getElementById("bgsvg");
     var bgHeight = Number(svgbg.getAttribute("height"));
-    var bgWidth = Number(svgbg.getAttribute("width"));;
+    var bgWidth = Number(svgbg.getAttribute("width"));
+    var obj=null;
+    objects=[];
     //triangle 
     var x1 = 20;
     var x2 = 75;
@@ -89,6 +99,11 @@
     var y = 20;
     var height = 100;
     var width = 100;
+    //line
+    var lx1=20;
+    var ly1=20;
+    var lx2=100;
+    var ly2=100;
     //add button
     document.getElementById("add-button").onclick = function() {
         var shape = document.getElementById("shape").value;
@@ -97,16 +112,16 @@
         //check if both values are none
         if(fill=="none" && stroke=="none"){
             alert("Il est interdit de mettre le fill et le stroke nuls");           //alert
-            return;
+            return;     
         }
     if(shape == "tri"){//triangle
-           
-        var obj=document.createElementNS("http://www.w3.org/2000/svg","polygon")
+        obj=document.createElementNS("http://www.w3.org/2000/svg","polygon")
         obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
         //show tri-pnl
         document.getElementById("mfy-tri").style.display="block";
         document.getElementById("mfy-rect").style.display="none";
         document.getElementById("mfy-cer").style.display="none";
+        document.getElementById("mfy-line").style.display="none"
         //show attributes in input
         document.getElementById("x1").value=x1;
         document.getElementById("x2").value=x2;
@@ -122,7 +137,7 @@
         obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`); 
             }
         else{
-            alert("valeur invalide")
+            alert("valeur invalide");
             }
         }//end of x1
         document.getElementById("x2").onchange = function(){
@@ -132,7 +147,7 @@
         obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`); 
             }
         else{
-            alert("valeur invalide")
+            alert("valeur invalide");
             }
         }//end of x2
         document.getElementById("x3").onchange = function(){
@@ -142,17 +157,17 @@
         obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`); 
             }
         else{
-            alert("valeur invalide")
+            alert("valeur invalide");
             }
         }//end of x3
         document.getElementById("y1").onchange = function(){
         var Y1=Number(document.getElementById("y1").value);
         if(Y1 <= bgHeight && Y1>=y3){//
-        y1=Y1;
+        y1=Y1; 
         obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);  
             }
         else{
-            alert("valeur invalide")
+            alert("valeur invalide");
             }
         }//end of y1
         document.getElementById("y2").onchange = function(){
@@ -162,7 +177,7 @@
         obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);  
             }
         else{
-            alert("valeur invalide")
+            alert("valeur invalide");
             }
         }//end of y2
         document.getElementById("y3").onchange = function(){
@@ -172,12 +187,12 @@
         obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);  
             }
         else{
-            alert("valeur invalide")
+            alert("valeur invalide");
             }
         }//end of y3
-    }
+    }       //end of triangle
     if(shape == "cer"){
-        var obj=document.createElementNS("http://www.w3.org/2000/svg","circle");
+        obj=document.createElementNS("http://www.w3.org/2000/svg","circle");
         obj.setAttribute("cx",`${cx}`);
         obj.setAttribute("cy",`${cy}`);
         obj.setAttribute("r",`${r}`);
@@ -185,6 +200,7 @@
         document.getElementById("mfy-cer").style.display="block";
         document.getElementById("mfy-tri").style.display="none";
         document.getElementById("mfy-rect").style.display="none";
+        document.getElementById("mfy-line").style.display="none"
         //show cercle attributes
         document.getElementById("cx").value=cx;
         document.getElementById("cy").value=cy;
@@ -220,22 +236,88 @@
             alert("valeur invalide")
             }
         }//end of r
+
     }
+        if(shape == "line"){//line
+           
+           obj=document.createElementNS("http://www.w3.org/2000/svg","line")
+           obj.setAttribute("x1",`${lx1}`);
+           obj.setAttribute("y1",`${ly1}`);
+           obj.setAttribute("x2",`${lx2}`);
+           obj.setAttribute("y2",`${ly2}`);
+           //show mfy-line
+           document.getElementById("mfy-tri").style.display="none";
+           document.getElementById("mfy-rect").style.display="none";
+           document.getElementById("mfy-cer").style.display="none";
+           document.getElementById("mfy-line").style.display="block"
+
+           //show attributes in input
+           document.getElementById("lx1").value=lx1;
+           document.getElementById("lx2").value=lx2;
+           document.getElementById("ly1").value=ly1;
+           document.getElementById("ly2").value=ly2;
+           
+           //set entered values on change
+           document.getElementById("lx1").onchange = function(){
+           var Lx1=Number(document.getElementById("lx1").value);
+           if(Lx1>=0 && Lx1<=lx2){
+           lx1=Lx1;
+           obj.setAttribute("x1",`${lx1}`); 
+               }
+           else{
+               alert("valeur invalide")
+               }
+           }//end of lx1
+           document.getElementById("lx2").onchange = function(){
+           var Lx2=Number(document.getElementById("lx2").value);
+           if(Lx2>=lx1 && Lx2<=bgWidth){
+           lx2=Lx2;
+           obj.setAttribute("x2",`${lx2}`); 
+               }
+           else{
+               alert("valeur invalide")
+               }
+           }//end of lx2
+           
+           document.getElementById("ly1").onchange = function(){
+           var Ly1=Number(document.getElementById("ly1").value);
+           if(Ly1 >= 0 && Ly1 <= ly2){//
+           ly1=Ly1;
+           obj.setAttribute("y1",`${ly1}`);  
+               }
+           else{
+               alert("valeur invalide")
+               }
+           }//end of ly1
+           document.getElementById("ly2").onchange = function(){
+           var Ly2=Number(document.getElementById("ly2").value);
+           if(Ly2 <=bgHeight  && Ly2 >= ly1){//
+           ly2=Ly2;
+           obj.setAttribute("y2",`${Ly2}`);  
+               }
+           else{
+               alert("valeur invalide")
+               }
+           }//end of ly2
+       }//end of line
     if(shape == "rect"){
-        var obj=document.createElementNS("http://www.w3.org/2000/svg","rect");
+        obj=document.createElementNS("http://www.w3.org/2000/svg","rect");
         obj.setAttribute("width",`${height}`);
         obj.setAttribute("height",`${width}`);
         obj.setAttribute("x",`${x}`);
         obj.setAttribute("y",`${y}`);
+
         //show rect-pnl
         document.getElementById("mfy-rect").style.display="block";
         document.getElementById("mfy-tri").style.display="none";
         document.getElementById("mfy-cer").style.display="none";
+
         //show attributes in input
         document.getElementById("x").value=x;
         document.getElementById("y").value=y;
         document.getElementById("width").value=width;
         document.getElementById("height").value=height;
+
         //set entered values on change
         document.getElementById("x").onchange = function(){
         var X=Number(document.getElementById("x").value);
@@ -254,7 +336,7 @@
         obj.setAttribute("y",`${y}`);  
             }
         else{
-            alert("valeur invalide")
+            alert("valeur invalide");
             }
         }//end of y
         document.getElementById("width").onchange = function(){
@@ -276,14 +358,17 @@
         else{
             alert("valeur invalide")
             }
-        }//end of height
+        }//end of height        
     }
+
         //set the style
         obj.setAttribute("fill",fill);
         obj.setAttribute("stroke",stroke);
         obj.setAttribute("stroke-width","3");
         //add the object
         svgbg.appendChild(obj);
+        objects.push(obj);
+
         //show control panel
         document.getElementsByClassName("move-pl")[0].style.display="block";
        
@@ -310,7 +395,7 @@
             }
             obj.setAttribute("cy",`${cy}`);
         }
-        if(shape == "tri"){
+        else if(shape == "tri"){
             //suppose y2 is the heigher
             if(y2-move>0){
                 y1=y1-move;
@@ -321,9 +406,24 @@
                 y3=y3-y2;
                 y1=y1-y2;
                 y2=0;
-                
             }
             obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+        else if(shape == "line"){
+            //suppose y2 is the heigher
+            if(ly1-move>0){
+                ly1=ly1-move;
+                ly2=ly2-move;
+            }
+            else{
+                ly2=ly2-ly1;
+                ly1=0;
+                
+            }
+            obj.setAttribute("x1",`${lx1}`);
+            obj.setAttribute("x2",`${lx2}`);
+            obj.setAttribute("y1",`${ly1}`);
+            obj.setAttribute("y2",`${ly2}`);
         }
 
     }//end of up
@@ -347,20 +447,36 @@
             }
             obj.setAttribute("cy",`${cy}`);
         }
-        if(shape == "tri"){
+        else if(shape == "tri"){
             //suppose y1 is the lowest
-            if(y1+move<500){
+            if(y1+move<bgHeight){
                 y1=y1+move;
                 y2=y2+move;
                 y3=y3+move;
             }
             else{
-                y2=y2+500-y1;
-                y3=y3+500-y1;
-                y1=500;
+                y2=y2+bgHeight-y1;
+                y3=y3+bgHeight-y1;
+                y1=bgHeight;
                 
             }
             obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+        else if(shape == "line"){
+            //suppose y1 is the lowest
+            if(ly2+move<=bgHeight){
+                ly1=ly1+move;
+                ly2=ly2+move;
+            }
+            else{
+                ly1=ly1+bgHeight-ly2;
+                ly2=bgHeight;
+                
+            }
+            obj.setAttribute("x1",`${lx1}`);
+            obj.setAttribute("x2",`${lx2}`);
+            obj.setAttribute("y1",`${ly1}`);
+            obj.setAttribute("y2",`${ly2}`);
         }
 
     }//end of down
@@ -384,7 +500,7 @@
             }
             obj.setAttribute("cx",`${cx}`);
         }
-        if(shape == "tri"){
+        else if(shape == "tri"){
             //suppose x3 is on right
             if(x3+move<500){
                 x1=x1+move;
@@ -397,6 +513,21 @@
                 x3=500;
             }
             obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+        else if(shape == "line"){
+            
+            if(lx2+move <= 500){
+                lx1=lx1+move;
+                lx2=lx2+move;
+            }
+            else{
+                lx1=lx1+500-lx2;
+                lx2=500;
+            }
+            obj.setAttribute("x1",`${lx1}`);
+            obj.setAttribute("x2",`${lx2}`);
+            obj.setAttribute("y1",`${ly1}`);
+            obj.setAttribute("y2",`${ly2}`);
         }
 
     }//end of right
@@ -435,11 +566,474 @@
             }
             obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
         }
+        if(shape == "line"){
+            if(lx1-move>0){
+                lx1=lx1-move;
+                lx2=lx2-move;
+            }
+            else{
+                lx2=lx2-lx1;
+                lx1=0;
+            }
+            obj.setAttribute("x1",`${lx1}`);
+            obj.setAttribute("x2",`${lx2}`);
+            obj.setAttribute("y1",`${ly1}`);
+            obj.setAttribute("y2",`${ly2}`);
+        }
 
     }//end of left
-}
-    
 
-</script>
+    //remove button
+    document.getElementById("gest-del").onclick=function(){
+        obj.remove();
+        objects.pop();
+        obj=objects[objects.length-1];
+        if(shape == "tri"){//triangle
+        //show tri-pnl
+        document.getElementById("mfy-tri").style.display="block";
+        document.getElementById("mfy-rect").style.display="none";
+        document.getElementById("mfy-cer").style.display="none";
+        document.getElementById("mfy-line").style.display="none"
+        //how to show this object attributes????????????????????????
+
+
+
+        //set entered values on change
+        document.getElementById("x1").onchange = function(){
+        var X1=Number(document.getElementById("x1").value);
+        if(X1>=0 && X1<=x2){
+        x1=X1;
+        obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`); 
+            }
+        else{
+            alert("valeur invalide");
+            }
+        }//end of x1
+        document.getElementById("x2").onchange = function(){
+        var X2=Number(document.getElementById("x2").value);
+        if(X2>=x1 && X2<=x3){
+        x2=X2;
+        obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`); 
+            }
+        else{
+            alert("valeur invalide");
+            }
+        }//end of x2
+        document.getElementById("x3").onchange = function(){
+        var X3=Number(document.getElementById("x3").value);
+        if(X3<=bgWidth && X3>=x2){
+        x3=X3;
+        obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`); 
+            }
+        else{
+            alert("valeur invalide");
+            }
+        }//end of x3
+        document.getElementById("y1").onchange = function(){
+        var Y1=Number(document.getElementById("y1").value);
+        if(Y1 <= bgHeight && Y1>=y3){//
+        y1=Y1; 
+        obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);  
+            }
+        else{
+            alert("valeur invalide");
+            }
+        }//end of y1
+        document.getElementById("y2").onchange = function(){
+        var Y2=Number(document.getElementById("y2").value);
+        if(Y2 <= y3 && Y2>=0){//
+        y2=Y2;
+        obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);  
+            }
+        else{
+            alert("valeur invalide");
+            }
+        }//end of y2
+        document.getElementById("y3").onchange = function(){
+        var Y3=Number(document.getElementById("y3").value);
+        if(Y3 <= y1 && Y3>=y2){//
+        y3=Y3;
+        obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);  
+            }
+        else{
+            alert("valeur invalide");
+            }
+        }//end of y3
+    }       //end of triangle
+    if(shape == "cer"){
+        //show mfy-pnl
+        document.getElementById("mfy-cer").style.display="block";
+        document.getElementById("mfy-tri").style.display="none";
+        document.getElementById("mfy-rect").style.display="none";
+        document.getElementById("mfy-line").style.display="none"
+        //show cercle attributes
+        document.getElementById("cx").value=cx;
+        document.getElementById("cy").value=cy;
+        document.getElementById("r").value=r;
+        //set entered values on change
+        document.getElementById("cx").onchange = function(){
+        var Cx=Number(document.getElementById("cx").value);
+        if(Cx+r <= bgWidth && Cx-r>=0){
+        cx=Cx;
+        obj.setAttribute("cx",`${cx}`);  
+            }
+        else{
+            alert("valeur invalide")
+            }     
+        }//end of cx
+        document.getElementById("cy").onchange = function(){
+        var Cy=Number(document.getElementById("cy").value);
+        if(Cy+r <= bgHeight && Cy-r>=0){//
+        cy=Cy;
+        obj.setAttribute("cy",`${cy}`); 
+            }
+        else{
+            alert("valeur invalide")
+            }
+        }//end of cy
+        document.getElementById("r").onchange = function(){
+        var R=Number(document.getElementById("r").value);
+        if(R+cx<= bgWidth && R+cy<=bgHeight && cx-R >= 0 && cy-R >= 0){//
+        r=R;
+        obj.setAttribute("r",`${r}`);  
+            }
+        else{
+            alert("valeur invalide")
+            }
+        }//end of r
+
+    }
+        if(shape == "line"){//line
+           //show mfy-line
+           document.getElementById("mfy-tri").style.display="none";
+           document.getElementById("mfy-rect").style.display="none";
+           document.getElementById("mfy-cer").style.display="none";
+           document.getElementById("mfy-line").style.display="block"
+
+           //show attributes in input
+           document.getElementById("lx1").value=lx1;
+           document.getElementById("lx2").value=lx2;
+           document.getElementById("ly1").value=ly1;
+           document.getElementById("ly2").value=ly2;
+           
+           //set entered values on change
+           document.getElementById("lx1").onchange = function(){
+           var Lx1=Number(document.getElementById("lx1").value);
+           if(Lx1>=0 && Lx1<=lx2){
+           lx1=Lx1;
+           obj.setAttribute("x1",`${lx1}`); 
+               }
+           else{
+               alert("valeur invalide")
+               }
+           }//end of lx1
+           document.getElementById("lx2").onchange = function(){
+           var Lx2=Number(document.getElementById("lx2").value);
+           if(Lx2>=lx1 && Lx2<=bgWidth){
+           lx2=Lx2;
+           obj.setAttribute("x2",`${lx2}`); 
+               }
+           else{
+               alert("valeur invalide")
+               }
+           }//end of lx2
+           
+           document.getElementById("ly1").onchange = function(){
+           var Ly1=Number(document.getElementById("ly1").value);
+           if(Ly1 >= 0 && Ly1 <= ly2){//
+           ly1=Ly1;
+           obj.setAttribute("y1",`${ly1}`);  
+               }
+           else{
+               alert("valeur invalide")
+               }
+           }//end of ly1
+           document.getElementById("ly2").onchange = function(){
+           var Ly2=Number(document.getElementById("ly2").value);
+           if(Ly2 <=bgHeight  && Ly2 >= ly1){//
+           ly2=Ly2;
+           obj.setAttribute("y2",`${Ly2}`);  
+               }
+           else{
+               alert("valeur invalide")
+               }
+           }//end of ly2
+       }//end of line
+    if(shape == "rect"){
+       
+        //show rect-pnl
+        document.getElementById("mfy-rect").style.display="block";
+        document.getElementById("mfy-tri").style.display="none";
+        document.getElementById("mfy-cer").style.display="none";
+
+        //show attributes in input ?????????????????????
+        
+
+        //set entered values on change
+        document.getElementById("x").onchange = function(){
+        var X=Number(document.getElementById("x").value);
+        if(X+width <= bgWidth && X>=0){
+        x=X;
+        obj.setAttribute("x",`${x}`);  
+            }
+        else{
+            alert("valeur invalide")
+            }
+        }//end of x
+        document.getElementById("y").onchange = function(){
+        var Y=Number(document.getElementById("y").value);
+        if(Y+height <= bgHeight && Y>=0){//
+        y=Y;
+        obj.setAttribute("y",`${y}`);  
+            }
+        else{
+            alert("valeur invalide");
+            }
+        }//end of y
+        document.getElementById("width").onchange = function(){
+        var Width=Number(document.getElementById("width").value);
+        if(Width+x<= bgWidth && Width>0){//
+        width=Width;
+        obj.setAttribute("width",`${width}`);  
+            }
+        else{
+            alert("valeur invalide")
+            }
+        }//end of width
+        document.getElementById("height").onchange = function(){
+        var Height=Number(document.getElementById("height").value);
+        if(Height+y<= bgHeight && Height>0){//
+        height=Height;
+        obj.setAttribute("height",`${height}`);  
+            }
+        else{
+            alert("valeur invalide")
+            }
+        }//end of height        
+    }
+
+        //set the style
+        obj.setAttribute("fill",fill);
+        obj.setAttribute("stroke",stroke);
+        obj.setAttribute("stroke-width","3");
+        //show control panel
+        document.getElementsByClassName("move-pl")[0].style.display="block";
+       
+        //mouvement
+          var move = 40;
+         //deplacement value
+        document.getElementById("up").onclick = function(){
+            
+        if(shape == "rect"){
+            if(y-move>0){
+                y=y-move;
+            }
+            else{
+                y=0;
+            }
+            obj.setAttribute("y",`${y}`);
+        }
+        else if(shape == "cer"){
+            if((cy-r)-move>0){
+                cy=cy-move;
+            }
+            else{
+                cy=r;
+            }
+            obj.setAttribute("cy",`${cy}`);
+        }
+        else if(shape == "tri"){
+            //suppose y2 is the heigher
+            if(y2-move>0){
+                y1=y1-move;
+                y2=y2-move;
+                y3=y3-move;
+            }
+            else{
+                y3=y3-y2;
+                y1=y1-y2;
+                y2=0;
+            }
+            obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+        else if(shape == "line"){
+            //suppose y2 is the heigher
+            if(ly1-move>0){
+                ly1=ly1-move;
+                ly2=ly2-move;
+            }
+            else{
+                ly2=ly2-ly1;
+                ly1=0;
+                
+            }
+            obj.setAttribute("x1",`${lx1}`);
+            obj.setAttribute("x2",`${lx2}`);
+            obj.setAttribute("y1",`${ly1}`);
+            obj.setAttribute("y2",`${ly2}`);
+        }
+
+    }//end of up
+    document.getElementById("down").onclick = function(){
+            
+            if(shape == "rect"){
+            if(y+height+move<500){
+                y=y+move;
+            }
+            else{
+                y=500-height;
+            }
+            obj.setAttribute("y",`${y}`);
+        }
+        else if(shape == "cer"){
+            if((cy+r)+move<500){
+                cy=cy+move;
+            }
+            else{
+                cy=500-r;
+            }
+            obj.setAttribute("cy",`${cy}`);
+        }
+        else if(shape == "tri"){
+            //suppose y1 is the lowest
+            if(y1+move<bgHeight){
+                y1=y1+move;
+                y2=y2+move;
+                y3=y3+move;
+            }
+            else{
+                y2=y2+bgHeight-y1;
+                y3=y3+bgHeight-y1;
+                y1=bgHeight;
+                
+            }
+            obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+        else if(shape == "line"){
+            //suppose y1 is the lowest
+            if(ly2+move<=bgHeight){
+                ly1=ly1+move;
+                ly2=ly2+move;
+            }
+            else{
+                ly1=ly1+bgHeight-ly2;
+                ly2=bgHeight;
+                
+            }
+            obj.setAttribute("x1",`${lx1}`);
+            obj.setAttribute("x2",`${lx2}`);
+            obj.setAttribute("y1",`${ly1}`);
+            obj.setAttribute("y2",`${ly2}`);
+        }
+
+    }//end of down
+    document.getElementById("right").onclick = function(){
+            
+            if(shape == "rect"){
+            if(x+width+move<500){
+                x=x+move;
+            }
+            else{
+                x=500-width;
+            }
+            obj.setAttribute("x",`${x}`);
+        }
+        else if(shape == "cer"){
+            if((cx+r)+move<500){
+                cx=cx+move;
+            }
+            else{
+                cx=500-r;
+            }
+            obj.setAttribute("cx",`${cx}`);
+        }
+        else if(shape == "tri"){
+            //suppose x3 is on right
+            if(x3+move<500){
+                x1=x1+move;
+                x2=x2+move;
+                x3=x3+move;
+            }
+            else{
+                x1=x1+500-x3;
+                x2=x2+500-x3;
+                x3=500;
+            }
+            obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+        else if(shape == "line"){
+            
+            if(lx2+move <= 500){
+                lx1=lx1+move;
+                lx2=lx2+move;
+            }
+            else{
+                lx1=lx1+500-lx2;
+                lx2=500;
+            }
+            obj.setAttribute("x1",`${lx1}`);
+            obj.setAttribute("x2",`${lx2}`);
+            obj.setAttribute("y1",`${ly1}`);
+            obj.setAttribute("y2",`${ly2}`);
+        }
+
+    }//end of right
+    document.getElementById("left").onclick = function(){
+            
+            if(shape == "rect"){
+            if(x-move>0){
+                x=x-move;
+            }
+            else{
+                x=0;
+            }
+            obj.setAttribute("x",`${x}`);
+        }
+        else if(shape == "cer"){
+            if((cx-r)-move>0){
+                cx=cx-move;
+            }
+            else{
+                cx=r;
+            }
+            obj.setAttribute("cx",`${cx}`);
+        }
+        if(shape == "tri"){
+            //suppose x1 is on the left
+            if(x1-move>0){
+                x1=x1-move;
+                x2=x2-move;
+                x3=x3-move;
+            }
+            else{
+                x3=x3-x1;
+                x2=x2-x1;
+                x1=0;
+                
+            }
+            obj.setAttribute("points",`${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+        }
+        if(shape == "line"){
+            if(lx1-move>0){
+                lx1=lx1-move;
+                lx2=lx2-move;
+            }
+            else{
+                lx2=lx2-lx1;
+                lx1=0;
+            }
+            obj.setAttribute("x1",`${lx1}`);
+            obj.setAttribute("x2",`${lx2}`);
+            obj.setAttribute("y1",`${ly1}`);
+            obj.setAttribute("y2",`${ly2}`);
+        }
+
+    }//end of left
+
+    }
+}
+
+
+</script>           
 </body>
 </html>
