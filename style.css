@@ -1,0 +1,72 @@
+*{
+    box-sizing: border-box
+}
+.bg-hero{
+    display: flex;
+    flex-direction: row;
+    height:100vh;
+   
+
+}
+section.left{
+    width: 42%;
+}
+#shape-gest{
+    height: 100%;
+    justify-content: center;
+}
+#shape-gest > button {
+    padding: 7px 20px;
+    border-radius: 7px;
+    background-color: #22577E;
+    color: white;
+    margin-bottom: 0.8em;
+}
+#shape-gest :last-child{
+    margin-bottom: 0;
+}
+#shape-gest > button:hover{
+background-color: #5584AC;
+}
+#add-button{
+    background-color: #4D7CAE;
+    margin-left: 3em;
+    color: white;
+    padding: 4px 16px;
+    border: 3px solid transparent ;
+    transition: border 0.2s ease;
+    transition: background-color 0.2s ease;
+}
+#add-button:hover{
+    background-color: white;
+    color: #4D7CAE;
+    border: 3px solid #4D7CAE ;
+    
+}
+.shapeGen{
+    margin-bottom: .7em;
+    margin-top: .1em;
+}
+.shapeGen > select {
+	background-color: #4D7CAE;
+	color: white;
+	padding: 5px;
+    border-radius: 5px;
+
+}
+
+.move-pl > input{
+    background-color: #4D7CAE;
+	color: white;
+	padding: 6px;
+    border-radius: 5px;
+    margin-right: .5em;
+}
+.mfy{
+    position: absolute;
+}
+.mfy>input{
+    margin-right: 1.7em;
+    margin-top: .3em;
+    border: 2px solid #6A99CB;
+}
